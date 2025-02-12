@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import {  useNavigate } from 'react-router-dom'
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const{login} = useAuth()
+    const{login, isAuthenticated} = useAuth()
+    const navigate = useNavigate()
 
   const handleUsername = (e:React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value)
@@ -12,6 +14,14 @@ const Login = () => {
   const handlePassword = (e:React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value)
   }
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token')
+    if(token && isAuthenticated){
+      login(token)
+      navigate('/transaction')
+    }
+  },[isAuthenticated, login])
 
   const hadnleLogin = async() => {
 
@@ -43,7 +53,6 @@ const Login = () => {
         <input value={username} onChange={handleUsername} type='text' placeholder='username'></input>
         <input value={password} onChange={handlePassword} type='password' placeholder='password'></input>
         <input type="button" value='Login' onClick={hadnleLogin} />
-        <button onClick={handleGetInfo}>Get Info</button>
       </div>
     </>
   )
