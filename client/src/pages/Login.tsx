@@ -27,6 +27,7 @@ const Login = () => {
       }
       const data = await res.json()
       if (data.success) {
+        localStorage.setItem('user', username)
         login(data.token)
       }
       
@@ -35,26 +36,6 @@ const Login = () => {
     }
   }
 
-  const handleGetInfo = async() => {
-
-    try {
-      const token = localStorage.getItem('token')
-      const res = await fetch(`http://localhost:3000/accounts/${username}`,{
-        headers:{
-          'Authorization':`Bearer ${token}`
-        }
-      })
-      if (!res.ok) {
-        throw new Error
-      }
-      const data = await res.json()
-      console.log(data)
-      
-    } catch (error) {
-      console.error(error)
-    }
-
-  }
 
   return (
     <>
